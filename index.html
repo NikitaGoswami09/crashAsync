@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stopwatch</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    #display {
+        font-size: 3em;
+        margin-bottom: 20px;
+    }
+    #buttons {
+        display: flex;
+        justify-content: center;
+    }
+    button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div id="display">00:00:00</div>
+
+<div id="buttons">
+    <button id="startBtn" onclick="start()">Start</button>
+    <button id="pauseBtn" onclick="pause()">Pause</button>
+    <button id="resetBtn" onclick="reset()">Reset</button>
+</div>
+
+<script>
+    let timer;
+    let startTime;
+    let running = false;
+    let elapsed = 0;
+
+    function start() {
+        if (!running) {
+            startTime = Date.now() - elapsed;
+            timer = setInterval(updateDisplay, 100);
+            running = true;
+        }
+    }
+
+    function pause() {
+        if (running) {
+            clearInterval(timer);
+            running = false;
+        }
+    }
+
+    function reset() {
+        clearInterval(timer);
+        running = false;
+        elapsed = 0;
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        elapsed = Date.now() - startTime;
+        let seconds = Math.floor(elapsed / 1000);
+        let minutes = Math.floor(seconds / 60);
+        let hours = Math.floor(minutes / 60);
+
+        seconds %= 60;
+        minutes %= 60;
+
+        let displayString = '';
+        if (hours > 0) {
+            displayString += hours.toString().padStart(2, '0') + ':';
+        }
+        if (hours > 0 || minutes > 0) {
+            displayString += minutes.toString().padStart(2, '0') + ':';
+        }
+        displayString += seconds.toString().padStart(2, '0');
+
+        document.getElementById('display').textContent = displayString;
+    }
+</script>
+
+</body>
+</html>
